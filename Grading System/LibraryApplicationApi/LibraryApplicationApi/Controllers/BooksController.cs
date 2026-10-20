@@ -1,11 +1,13 @@
 ﻿using LibraryApplicationApi.Data;
 using LibraryApplicationApi.models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApplicationApi.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
@@ -35,7 +37,7 @@ namespace LibraryApplicationApi.Controllers
 
             return book;
         }
-
+        [Authorize(Roles = "Admin,Member")]
         [HttpPost]
         public async Task<ActionResult<Book>> CreateBook(Book book)
         {
@@ -49,7 +51,7 @@ namespace LibraryApplicationApi.Controllers
                 book
             );
         }
-
+        [Authorize(Roles = "Admin,Member")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, Book book)
         {
@@ -64,8 +66,8 @@ namespace LibraryApplicationApi.Controllers
 
             return NoContent();
         }
-
-        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
             var book = await _context.Books.FindAsync(id);
@@ -81,6 +83,33 @@ namespace LibraryApplicationApi.Controllers
 
             return NoContent();
         }
+            [HttpGet("search")] 
+             
+            public async Task<ActionResult<IEnumerable<Book>>> SearchBooks(
+                [FromQuery] string term)
+            {
+                if (string.IsNullOrWhiteSpace(term))
+                {
+                    return BadRequest(new
+                    {
+                        message = "Please provide a search term."
+                    });
+                }
+
+                term = term.Trim();
+
+                var books = await _context.Books
+                    .AsNoTracking()
+                    .Where(b =>
+                        b.Title.Contains(term) ||
+                        b.Author.Contains(term) ||
+                        b.ISBN.Contains(term))
+                    .ToListAsync();
+
+                return Ok(books);
+            }
+
+        }
     }
-}
+
     

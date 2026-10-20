@@ -1,4 +1,4 @@
-﻿using LibraryApplicationApi.Data;
+﻿using LibraryApi.Models;
 using LibraryApplicationApi.models;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +10,9 @@ namespace LibraryApplicationApi.Data
             : base(options)
         {
         }
-
         public DbSet<Book> Books { get; set; }
-
         public DbSet<Member> Members { get; set; }
-
         public DbSet<Borrowing> Borrowings { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

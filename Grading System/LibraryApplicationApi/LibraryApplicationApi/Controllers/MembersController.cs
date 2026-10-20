@@ -1,10 +1,12 @@
 ﻿using LibraryApplicationApi.Data;
 using LibraryApplicationApi.models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApplicationApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MembersController : ControllerBase
@@ -54,7 +56,7 @@ namespace LibraryApplicationApi.Controllers
             return member;
         }
 
-        
+        [Authorize(Roles = "Admin,Member")]
         [HttpPost]
         public async Task<ActionResult<Member>> CreateMember(Member member)
         {
@@ -73,7 +75,7 @@ namespace LibraryApplicationApi.Controllers
             );
         }
 
-        
+        [Authorize(Roles = "Admin,Member")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMember(
             int id, Member member)
@@ -120,7 +122,7 @@ namespace LibraryApplicationApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Members/1
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMember(int id)
         {

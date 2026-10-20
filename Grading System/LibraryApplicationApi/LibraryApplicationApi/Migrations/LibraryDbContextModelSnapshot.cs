@@ -22,6 +22,35 @@ namespace LibraryApplicationApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("LibraryApi.Models.ApplicationUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationUsers");
+                });
+
             modelBuilder.Entity("LibraryApplicationApi.models.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -84,11 +113,11 @@ namespace LibraryApplicationApi.Migrations
 
             modelBuilder.Entity("LibraryApplicationApi.models.Member", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("MemberId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MemberId"));
 
                     b.Property<DateTime>("DateTimeRegistrationDate")
                         .HasColumnType("datetime2");
@@ -105,7 +134,7 @@ namespace LibraryApplicationApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("MemberId");
 
                     b.ToTable("Members");
                 });
